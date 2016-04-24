@@ -4,9 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="globalProperties" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
-        <property name="location">
-                <value>config.properties</value>
-        </property>
+        <property name="location" value="config.properties"/>
     </bean>
 
     <bean id="botsProvider" class="ru.botgame.providers.BotsProvider">

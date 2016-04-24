@@ -22,7 +22,7 @@ public class ThreadPoolManager {
 
     public void startGames(List<Meeting> meetingList) {
         Date start = new Date();
-        ExecutorService executorService = Executors.newFixedThreadPool(threadPoolCapacity);
+        ExecutorService executorService = Executors.newFixedThreadPool(threadPoolCapacity, new DemonThreadFactory());
         for (final Meeting meeting : meetingList) {
             executorService.submit(new Runnable() {
                 @Override
@@ -31,14 +31,14 @@ public class ThreadPoolManager {
                     int time = (int) Math.abs(Math.random() * 5000);
                     time = time < 5_000 ? time : 5_000;
                     System.out.println(Thread.currentThread().getName() + " started " + time);
-                    //usefull methods
+                    //useful methods
                     System.out.println(meeting.getFirstBot().getLocation());
                     System.out.println(meeting.getSecondBot().getLocation());
                     System.out.println(meeting.getMeetingLocation());
                     //
 //                    try {
 //                        Thread.sleep(time);
-                        for (long i = 0, j = 0; i < 1_000_000_000; i++) {
+                        for (long i = 0, j = 0; i < 3_000_000_000L; i++) {
                             j++;
                         }
 //                    } catch (InterruptedException e) {

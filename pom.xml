@@ -30,10 +30,7 @@
     <build>
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
-                <excludes>
-                    <exclude>*.*</exclude>
-                </excludes>
+                <directory>src/resources</directory>
             </resource>
         </resources>
         <plugins>
@@ -98,7 +95,7 @@
                             <outputDirectory>${basedir}/target/resources</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>src/main/resources</directory>
+                                    <directory>src/resources</directory>
                                     <filtering>true</filtering>
                                 </resource>
                             </resources>
