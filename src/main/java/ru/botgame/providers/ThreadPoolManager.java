@@ -60,6 +60,7 @@ public class ThreadPoolManager {
         }
 
         //TODO: games finished and we have some results
+
         System.out.println("The End.\n" /*+ results*/);
         System.out.println((new Date().getTime() - start.getTime()));
         System.out.println((new Date().getTime() - start.getTime())/1000);

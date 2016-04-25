@@ -38,4 +38,8 @@ public class MeetingProvider {
         }
         return resultDirectories;
     }
+
+    public String getResultDirectory() {
+        return resultDirectory;
+    }
 }
