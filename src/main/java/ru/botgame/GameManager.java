@@ -14,17 +14,18 @@ public class GameManager {
     public static void main(String[] args) {
         ApplicationContext context = new ClassPathXmlApplicationContext("spring-config.xml");
 
-        List<Bot> bots = context.getBean("botsProvider", BotsProvider.class).getBots();
+        BotsProvider botsProvider = context.getBean("botsProvider", BotsProvider.class);
+        List<Bot> bots = botsProvider.getBots();
 
         MeetingProvider meetingsProvider = context.getBean("meetingsProvider", MeetingProvider.class);
         List<Meeting> meetingList = meetingsProvider.getMeetingList(bots);
 
         context.getBean("threadManager", ThreadPoolManager.class).startGames(meetingList);
 
-        Standings standings = new Standings(meetingsProvider.getResultDirectory());
+        Standings standings = new Standings(meetingsProvider, botsProvider);
         try {
             standings.calculateStandings();
-        } catch (IOException | BattleWithHimself e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
