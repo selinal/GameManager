@@ -18,14 +18,14 @@ public class Standings {
     private String[][] standings;
     private String pathResult;
 
-    MeetingProvider meetingsProvider;
-    BotsProvider botsProvider;
+    List<Meeting> meetingList;
+    List<Bot> bots;
 
-    public Standings(MeetingProvider meetingsProvider, BotsProvider botsProvider) {
-        this.meetingsProvider = meetingsProvider;
-        this.botsProvider = botsProvider;
+    public Standings(String resultsDirectory, List<Bot> bots, List<Meeting> meetingList) {
+        this.meetingList = meetingList;
+        this.bots = bots;
 
-        pathResult = "" + meetingsProvider.getResultDirectory() + "\\final_result";
+        pathResult = "" + resultsDirectory + File.separator + "final_result";
         File fileDirectory = new File(pathResult);
         fileDirectory.mkdir();
 
@@ -47,7 +47,7 @@ public class Standings {
     }
 
     public void calculateStandings() throws IOException {
-        List<Meeting> meetingList = meetingsProvider.getMeetingList(botsProvider.getBots());
+//        List<Meeting> meetingList = meetingsProvider.getMeetingList(botsProvider.getBots());
 
         for (int i = 0; i < meetingList.size(); i++) {
             Meeting meeting = meetingList.get(i);
@@ -165,7 +165,7 @@ public class Standings {
     }
 
     private String[] getBotsName() {
-        List<Bot> bots = botsProvider.getBots();
+//        List<Bot> bots = botsProvider.getBots();
         String[] list = new String[bots.size()];
         for (int i = 0; i < list.length; i++) {
             list[i] = bots.get(i).getName();

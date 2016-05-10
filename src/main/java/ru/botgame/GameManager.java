@@ -1,29 +1,42 @@
 package ru.botgame;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.botgame.entities.Bot;
 import ru.botgame.entities.Meeting;
-import ru.botgame.providers.*;
+import ru.botgame.providers.BotsProvider;
+import ru.botgame.providers.MeetingProvider;
+import ru.botgame.providers.Standings;
+import ru.botgame.providers.ThreadPoolManager;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 public class GameManager {
 
     public static void main(String[] args) {
-        ApplicationContext context = new ClassPathXmlApplicationContext("spring-config.xml");
 
-        BotsProvider botsProvider = context.getBean("botsProvider", BotsProvider.class);
-        List<Bot> bots = botsProvider.getBots();
-
-        MeetingProvider meetingsProvider = context.getBean("meetingsProvider", MeetingProvider.class);
-        List<Meeting> meetingList = meetingsProvider.getMeetingList(bots);
-
-        context.getBean("threadManager", ThreadPoolManager.class).startGames(meetingList);
-
-        Standings standings = new Standings(meetingsProvider, botsProvider);
         try {
+            Properties projectProperties = new Properties();
+            FileInputStream in = new FileInputStream("D:\\Projects\\GameManager\\src\\main\\resources\\config.properties");
+            projectProperties.load(in);
+            in.close();
+
+            String botsDirectory = projectProperties.getProperty("sbt.root.bots.directory");
+            String resultDirectory = projectProperties.getProperty("sbt.root.results.directory");
+            int capacity = Integer.parseInt(projectProperties.getProperty("sbt.thread.pool.capacity"));
+            long awaitTime = Integer.parseInt(projectProperties.getProperty("sbt.thread.termination.time.minutes"));
+
+            BotsProvider botsProvider = new BotsProvider(botsDirectory);
+            List<Bot> bots = botsProvider.getBots();
+
+            MeetingProvider meetingsProvider = new MeetingProvider(resultDirectory);
+            List<Meeting> meetingList = meetingsProvider.getMeetingList(bots);
+
+            ThreadPoolManager threadPoolManager = new ThreadPoolManager(capacity, awaitTime);
+            threadPoolManager.startGames(meetingList);
+
+            Standings standings = new Standings(resultDirectory, bots, meetingList);
             standings.calculateStandings();
         } catch (IOException e) {
             e.printStackTrace();
