@@ -57,7 +57,7 @@ namespace ru.sbt.codeit2016.CSBot
             do
             {
                 i = random.Next(BOARD_SIZE * BOARD_SIZE) + 2;
-            } while (board.Substring(i, 1).Equals("-"));
+            } while (!board.Substring(i, 1).Equals("-"));
             return board.Substring(0, i - 1) + GetCurrentFigure(board) + board.Substring(i + 1);
         }
 
