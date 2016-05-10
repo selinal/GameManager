@@ -1,7 +1,7 @@
 import random
 
-cross = 'X'
-zero = 'O'
+cross = 'x'
+zero = 'o'
 empty = '-'
 
 def getMySymbol():
@@ -13,11 +13,16 @@ def getPlaceToStep():
     while True:
         place = random.randint(0, len(field) - 1)
         if field[place] == empty:
-            return place;
+            return place
+        
+def doStep():
+    return field[0:place] + mySymbol + field[place + 1:]
 
-sourceField = input()
-field = sourceField.upper()
-mySymbol = getMySymbol()
-place = getPlaceToStep()
-outField = sourceField[0:place] + mySymbol + sourceField[place + 1]
-print(outField)
+while True:
+    field = input()
+    if field.count(empty) == 0:
+        break
+    mySymbol = getMySymbol()
+    place = getPlaceToStep()
+    print(doStep())
+print('Game over')
