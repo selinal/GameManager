@@ -7,6 +7,7 @@ import ru.botgame.providers.MeetingProvider;
 import ru.botgame.providers.Standings;
 import ru.botgame.providers.ThreadPoolManager;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -18,7 +19,7 @@ public class GameManager {
 
         try {
             Properties projectProperties = new Properties();
-            FileInputStream in = new FileInputStream("D:\\Projects\\GameManager\\src\\main\\resources\\config.properties");
+            FileInputStream in = new FileInputStream("resources" + File.separator + "config.properties");
             projectProperties.load(in);
             in.close();
 
