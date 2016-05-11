@@ -14,7 +14,7 @@ public class Main {
         m.run("bots\\d32bot1.exe", "bots\\d32bot2.exe");
     }
 
-    private void run(String bot1Location, String bot2Location) {
+    public void run(String bot1Location, String bot2Location) {
         bot1 = new Bot(bot1Location);
         bot2 = new Bot(bot2Location);
 

@@ -1,5 +1,6 @@
 package ru.botgame.providers;
 
+import ru.botgame.botexecutor.Main;
 import ru.botgame.entities.Meeting;
 
 import java.util.ArrayList;
@@ -27,26 +28,11 @@ public class ThreadPoolManager {
             executorService.submit(new Runnable() {
                 @Override
                 public void run() {
-                    //TODO: this is test code. Remove it!!! Insert here code for calling bots game
-                    int time = (int) Math.abs(Math.random() * 5000);
-                    time = time < 5_000 ? time : 5_000;
-                    System.out.println(Thread.currentThread().getName() + " started " + time);
-                    //useful methods
-                    System.out.println(meeting.getFirstBot().getLocation());
-                    System.out.println(meeting.getSecondBot().getLocation());
-                    System.out.println(meeting.getMeetingLocation());
-                    //
-//                    try {
-//                        Thread.sleep(time);
-                        for (long i = 0, j = 0; i < 3_000_000_000L; i++) {
-                            j++;
-                        }
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-                    System.out.println(Thread.currentThread().getName() + " finished");
-                    //TODO: this is test code. Remove it!!!
-                }
+
+                    Main m = new Main();
+                    m.run(meeting.getFirstBot().getLocation(), meeting.getSecondBot().getLocation());
+
+                 }
             });
         }
         executorService.shutdown();
@@ -59,7 +45,7 @@ public class ThreadPoolManager {
             executorService.shutdownNow();
         }
 
-        //TODO: games finished and we have some results
+        //games finished and we have some results
 
         System.out.println("The End.\n" /*+ results*/);
 //        System.err.println((new Date().getTime() - start.getTime()));
