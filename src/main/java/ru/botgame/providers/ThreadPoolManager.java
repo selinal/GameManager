@@ -46,7 +46,6 @@ public class ThreadPoolManager {
         }
 
         //games finished and we have some results
-
         System.out.println("The End.\n" /*+ results*/);
 //        System.err.println((new Date().getTime() - start.getTime()));
 //        System.err.println((new Date().getTime() - start.getTime())/1000);
