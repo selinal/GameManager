@@ -41,6 +41,7 @@ public class Executor {
                 while (!bot1.getReader().ready()) {
                 }
                 board = bot1.getReader().readLine();
+                board = bot1.getReader().readLine();
 
                 gameLog.writeTurnToLog("bot1: " + board.replace("19", ""));
                 refery.validateBoard(board, prevBoard, bot1, bot1, bot2);

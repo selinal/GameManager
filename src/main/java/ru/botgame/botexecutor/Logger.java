@@ -4,14 +4,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Logger {
-    private static String gameDir;
+    private String gameDir;
 
     public Logger(String gameDir) {
         this.gameDir = gameDir;
     }
 
     // ����������� ����
-    public static void writeTurnToLog(String turn) {
+    public void writeTurnToLog(String turn) {
         FileWriter writer = null;
 
         try {
