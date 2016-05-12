@@ -2,7 +2,6 @@ package ru.botgame.providers;
 
 import ru.botgame.entities.Meeting;
 
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

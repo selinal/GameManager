@@ -38,10 +38,13 @@ public class Executor {
                 prevBoard = board;
                 bot1.getWriter().write(board + "\n");
 //                bot1.getWriter().flush();
+//                bot1.getProcess().waitFor();
                 while (!bot1.getReader().ready()) {
                 }
                 board = bot1.getReader().readLine();
-                board = bot1.getReader().readLine();
+
+//                bot1.getWriter().write(board + "\n");
+//                bot1.getProcess().waitFor();
 
                 gameLog.writeTurnToLog("bot1: " + board.replace("19", ""));
                 refery.validateBoard(board, prevBoard, bot1, bot1, bot2);
@@ -58,7 +61,7 @@ public class Executor {
             }
         } catch (GameOverException e) {
             gameResultLog.writeGameResult(e.getResult(), e.getWinnerLocation());
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             bot1.kill();
