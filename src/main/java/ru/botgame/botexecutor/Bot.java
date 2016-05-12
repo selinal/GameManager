@@ -17,7 +17,7 @@ class Bot {
     }
 
     public void init() throws IOException {
-        process = Runtime.getRuntime().exec(botLocation);
+        process = Runtime.getRuntime().exec(botLocation + File.separator + "run.cmd");
 
         reader = new BufferedReader(new InputStreamReader(process.getInputStream()), 1024);
         writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()), 1024);
