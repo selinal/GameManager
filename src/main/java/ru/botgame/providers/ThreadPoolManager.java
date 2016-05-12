@@ -1,12 +1,12 @@
 package ru.botgame.providers;
 
-import ru.botgame.botexecutor.Main;
 import ru.botgame.entities.Meeting;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created on 23.04.2016.
@@ -22,15 +22,14 @@ public class ThreadPoolManager {
     }
 
     public void startGames(List<Meeting> meetingList) {
-        Date start = new Date();
         ExecutorService executorService = Executors.newFixedThreadPool(threadPoolCapacity, new DemonThreadFactory());
         for (final Meeting meeting : meetingList) {
             executorService.submit(new Runnable() {
                 @Override
                 public void run() {
 
-                    Main m = new Main();
-                    m.run(meeting.getFirstBot().getLocation(), meeting.getSecondBot().getLocation());
+                    ru.botgame.botexecutor.Executor m = new ru.botgame.botexecutor.Executor();
+                    m.run(meeting.getFirstBot().getLocation(), meeting.getSecondBot().getLocation(), meeting.getResultLocation());
 
                  }
             });
@@ -47,7 +46,5 @@ public class ThreadPoolManager {
 
         //games finished and we have some results
         System.out.println("The End.\n" /*+ results*/);
-//        System.err.println((new Date().getTime() - start.getTime()));
-//        System.err.println((new Date().getTime() - start.getTime())/1000);
     }
 }

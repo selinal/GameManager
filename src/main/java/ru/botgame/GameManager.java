@@ -19,7 +19,8 @@ public class GameManager {
 
         try {
             Properties projectProperties = new Properties();
-            FileInputStream in = new FileInputStream("resources" + File.separator + "config.properties");
+//            FileInputStream in = new FileInputStream("resources" + File.separator + "config.properties");
+            FileInputStream in = new FileInputStream(args[0]);//"C:\\HOME\\workplace\\GameManager\\src\\main\\resources\\config.properties");
             projectProperties.load(in);
             in.close();
 
