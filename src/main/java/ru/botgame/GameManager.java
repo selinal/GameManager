@@ -7,7 +7,6 @@ import ru.botgame.providers.MeetingProvider;
 import ru.botgame.providers.Standings;
 import ru.botgame.providers.ThreadPoolManager;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
