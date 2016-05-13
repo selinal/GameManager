@@ -9,8 +9,8 @@ public class Refery {
     public static final String OOOOO = "ooooo";
 
     public void validateBoard(String board, String prevBoard, Bot currBot, Bot bot1, Bot bot2) throws GameOverException {
-        // ����� ������ ��������
-        // 1. ���� ��������� �� ���������� �����
+        // ????? ?????? ????????
+        // 1. ???? ????????? ?? ?????????? ?????
         boolean emptyFieldExists = false;
         for (char c : board.toCharArray()) {
             if (c == '-') {
@@ -20,7 +20,7 @@ public class Refery {
         }
         if (!emptyFieldExists)
             throw new GameOverException(GameResult.DRAW, null);
-        // 2. ���������� ��� ��������� - ����������� ��������
+        // 2. ?????????? ??? ????????? - ??????????? ????????
         int difs = 0;
         char[] boardChars = board.toCharArray();
         char[] prevBoardChars = prevBoard.toCharArray();
@@ -30,7 +30,7 @@ public class Refery {
         }
         if (difs != 1)
             throw new GameOverException(GameResult.WIN, /*currBot == bot1 ? bot2.getBotLocation() : bot1.getBotLocation()*/null);
-        // 3. ������ �� ��������
+        // 3. ?????? ?? ????????
         String[] horiz = new String[BOARD_SIZE];
         for (int i = 0; i < BOARD_SIZE; i++) {
             int startPos = 2 + i * BOARD_SIZE;

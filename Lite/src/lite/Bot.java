@@ -1,36 +1,29 @@
-package ru.botgame.botexecutor;
+package lite;
 
 import java.io.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
- * Created by SBT-Khalimov-RR on 20.04.2016.
+ * Created by SBT-Galimov-RR on 13.05.2016.
  */
 class Bot {
     private Process process;
 
     private BufferedReader reader;
     private BufferedWriter writer;
-    private final String botLocation;
+    private final String name;
 
-    Bot(String botLocation) {
-        this.botLocation = botLocation;
+    public Bot(String name) {
+        this.name = name;
     }
 
-    public void init() throws IOException, GameOverException {
+    public void init() throws IOException {
         ProcessBuilder builder = new ProcessBuilder(
                 "cmd.exe",
                 "/c",
-                "cd " + botLocation + " && run.cmd"
+                "cd .\\botHere && run.bat"
         );
         builder.redirectErrorStream(true);
         process = builder.start();
-        if (process == null)
-            throw new GameOverException(GameResult.WIN, null);
-        if (!process.isAlive())
-            throw new GameOverException(GameResult.WIN, null);
-
         reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
     }
@@ -41,11 +34,15 @@ class Bot {
 
     public BufferedWriter getWriter() { return writer; }
 
-    public String getBotLocation() { return botLocation; }
+    public String getName() {
+        return name;
+    }
 
     public void kill() {
         process.destroyForcibly();
     }
 
-    public Process getProcess() { return process; }
+    public Process getProcess() {
+        return process;
+    }
 }
