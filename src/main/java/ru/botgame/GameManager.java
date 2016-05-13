@@ -23,7 +23,7 @@ public class GameManager {
 
     public GameManager() {
         Properties projectProperties = new Properties();
-        InputStream in = null;//"C:\\HOME\\workplace\\GameManager\\src\\main\\resources\\config.properties");
+        InputStream in = null;
         try {
             in = getClass().getClassLoader().getResourceAsStream("config.properties");
             projectProperties.load(in);
