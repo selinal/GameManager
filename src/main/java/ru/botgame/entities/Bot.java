@@ -5,20 +5,12 @@ public class Bot {
     private String Name;
     private String Location;
 
-    private int victoryCount;//количество побед
-    private int defeatCount;//количество поражений
-    private int drawCount;//Количество ничьей
-
     public Bot() {
     }
 
     public Bot(String name, String location) {
         Name = name;
         Location = location;
-
-        victoryCount = 0;
-        defeatCount = 0;
-        drawCount = 0;
     }
 
     public String getName() {
@@ -37,21 +29,4 @@ public class Bot {
         Location = location;
     }
 
-    public void addOneVictory(){victoryCount++;}
-
-    public void addOneDefeat(){defeatCount++;}
-
-    public void addOneDraw(){drawCount++;}
-
-    public int getVictoryCount() {
-        return victoryCount;
-    }
-
-    public int getDefeatCount() {
-        return defeatCount;
-    }
-
-    public int getDrawCount() {
-        return drawCount;
-    }
 }
