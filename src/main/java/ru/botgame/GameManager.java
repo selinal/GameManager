@@ -8,39 +8,54 @@ import ru.botgame.providers.Standings;
 import ru.botgame.providers.ThreadPoolManager;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
 public class GameManager {
 
-    public static void main(String[] args) {
+    private String botsDirectory;
+    private String resultDirectory;
+    private int capacity;
+    private long awaitTime;
 
+    public GameManager() {
+        Properties projectProperties = new Properties();
+        InputStream in = null;//"C:\\HOME\\workplace\\GameManager\\src\\main\\resources\\config.properties");
         try {
-            Properties projectProperties = new Properties();
-//            FileInputStream in = new FileInputStream("resources" + File.separator + "config.properties");
-            FileInputStream in = new FileInputStream(args[0]);//"C:\\HOME\\workplace\\GameManager\\src\\main\\resources\\config.properties");
+            in = getClass().getClassLoader().getResourceAsStream("config.properties");
             projectProperties.load(in);
-            in.close();
-
-            String botsDirectory = projectProperties.getProperty("sbt.root.bots.directory");
-            String resultDirectory = projectProperties.getProperty("sbt.root.results.directory");
-            int capacity = Integer.parseInt(projectProperties.getProperty("sbt.thread.pool.capacity"));
-            long awaitTime = Integer.parseInt(projectProperties.getProperty("sbt.thread.termination.time.minutes"));
-
-            BotsProvider botsProvider = new BotsProvider(botsDirectory);
-            List<Bot> bots = botsProvider.getBots();
-
-            MeetingProvider meetingsProvider = new MeetingProvider(resultDirectory);
-            List<Meeting> meetingList = meetingsProvider.getMeetingList(bots);
-
-            ThreadPoolManager threadPoolManager = new ThreadPoolManager(capacity, awaitTime);
-            threadPoolManager.startGames(meetingList);
-
-            Standings standings = new Standings(resultDirectory, bots, meetingList);
-            standings.calculateStandings();
+            botsDirectory = projectProperties.getProperty("sbt.root.bots.directory");
+            resultDirectory = projectProperties.getProperty("sbt.root.results.directory");
+            capacity = Integer.parseInt(projectProperties.getProperty("sbt.thread.pool.capacity"));
+            awaitTime = Integer.parseInt(projectProperties.getProperty("sbt.thread.termination.time.minutes"));
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                if(in != null)
+                    in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
     }
+
+    public void run() throws IOException {
+        BotsProvider botsProvider = new BotsProvider(botsDirectory);
+        List<Bot> bots = botsProvider.getBots();
+        MeetingProvider meetingsProvider = new MeetingProvider(resultDirectory);
+        List<Meeting> meetingList = meetingsProvider.getMeetingList(bots);
+
+        ThreadPoolManager threadPoolManager = new ThreadPoolManager(capacity, awaitTime);
+        threadPoolManager.startGames(meetingList);
+
+        Standings standings = new Standings(resultDirectory, bots, meetingList);
+        standings.calculateStandings();
+    }
+
+
 }
