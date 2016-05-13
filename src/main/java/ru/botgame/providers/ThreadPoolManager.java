@@ -14,10 +14,12 @@ public class ThreadPoolManager {
 
     private int threadPoolCapacity = 1;
     private long awaitTimeMinutes = 1;
+    private long timeout;
 
-    public ThreadPoolManager(int threadPoolCapacity, long awaitTimeMinutes) {
+    public ThreadPoolManager(int threadPoolCapacity, long awaitTimeMinutes, long timeout) {
         this.threadPoolCapacity = threadPoolCapacity;
         this.awaitTimeMinutes = awaitTimeMinutes;
+        this.timeout = timeout;
     }
 
     public void startGames(List<Meeting> meetingList) {
@@ -28,7 +30,7 @@ public class ThreadPoolManager {
                 public void run() {
 
                     ru.botgame.botexecutor.Executor m = new ru.botgame.botexecutor.Executor();
-                    m.run(meeting.getFirstBot().getLocation(), meeting.getSecondBot().getLocation(), meeting.getResultLocation());
+                    m.run(meeting.getFirstBot().getLocation(), meeting.getSecondBot().getLocation(), meeting.getResultLocation(), timeout);
 
                  }
             });
