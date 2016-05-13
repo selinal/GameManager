@@ -8,7 +8,7 @@ import java.io.IOException;
 public class Run {
 
     public static void main(String[] args) throws IOException {
-        GameManager gameManager = new GameManager();
+        GameManager gameManager = new GameManager(args[0]);
         gameManager.run();
     }
 }

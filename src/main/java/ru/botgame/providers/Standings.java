@@ -162,7 +162,7 @@ public class Standings {
         File f = new File(pathWinners);
         f.createNewFile();
         BufferedWriter writerWinners = new BufferedWriter(new FileWriter(pathWinners));
-        writerWinners.write("-;Victory;Defeat;Draw");
+        writerWinners.write("Команды;Побед;Поражений;Ничьих");
         writerWinners.newLine();
         String[] winners = calculateWinners();
         for (int i = 0; i < winners.length; i++) {
