@@ -21,7 +21,12 @@ class Bot {
     public void init() throws IOException, GameOverException {
 
 
-        ProcessBuilder builder = new ProcessBuilder("cmd","/c ","\"" + botLocation + File.separator + "run.bat\"");
+        ProcessBuilder builder = new ProcessBuilder(
+                "cmd.exe",
+                "/c",
+                "cd " + botLocation + " && run.bat"
+        );
+//        ProcessBuilder builder = new ProcessBuilder("java", "-jar", "...", "params");
 //        process = Runtime.getRuntime().exec("cmd /c \"" + botLocation + File.separator + "run.bat\"");
         builder.redirectErrorStream(true);
         process = builder.start();

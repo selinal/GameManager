@@ -21,7 +21,7 @@ public class Logger {
         }
         try {
             assert writer != null;
-            writer.write(turn + "\n");
+            writer.write(turn + "\r\n");
             writer.flush();
         }
         catch(IOException ex){

@@ -29,7 +29,7 @@ public class Refery {
                 difs++;
         }
         if (difs != 1)
-            throw new GameOverException(GameResult.WIN, currBot == bot1 ? bot2.getBotLocation() : bot1.getBotLocation());
+            throw new GameOverException(GameResult.WIN, /*currBot == bot1 ? bot2.getBotLocation() : bot1.getBotLocation()*/null);
         // 3. ������ �� ��������
         String[] horiz = new String[BOARD_SIZE];
         for (int i = 0; i < BOARD_SIZE; i++) {
@@ -92,30 +92,30 @@ public class Refery {
         for (String line: horiz)
         {
             if (line.indexOf(XXXXX) >= 0)
-                throw new GameOverException(GameResult.WIN, bot1.getBotLocation());
+                throw new GameOverException(GameResult.WIN, null/*bot1.getBotLocation()*/);
             if (line.indexOf(OOOOO) >= 0)
-                throw new GameOverException(GameResult.WIN, bot2.getBotLocation());
+                throw new GameOverException(GameResult.WIN, null /*bot2.getBotLocation()*/);
         }
         for (String line: vert)
         {
             if (line.indexOf(XXXXX) >= 0)
-                throw new GameOverException(GameResult.WIN, bot1.getBotLocation());
+                throw new GameOverException(GameResult.WIN, null/*bot1.getBotLocation()*/);
             if (line.indexOf(OOOOO) >= 0)
-                throw new GameOverException(GameResult.WIN, bot2.getBotLocation());
+                throw new GameOverException(GameResult.WIN, null /*bot2.getBotLocation()*/);
         }
         for (String line: diag1)
         {
             if (line.indexOf(XXXXX) >= 0)
-                throw new GameOverException(GameResult.WIN, bot1.getBotLocation());
+                throw new GameOverException(GameResult.WIN, null/*bot1.getBotLocation()*/);
             if (line.indexOf(OOOOO) >= 0)
-                throw new GameOverException(GameResult.WIN, bot2.getBotLocation());
+                throw new GameOverException(GameResult.WIN, null /*bot2.getBotLocation()*/);
         }
         for (String line: diag2)
         {
             if (line.indexOf(XXXXX) >= 0)
-                throw new GameOverException(GameResult.WIN, bot1.getBotLocation());
+                throw new GameOverException(GameResult.WIN, null/*bot1.getBotLocation()*/);
             if (line.indexOf(OOOOO) >= 0)
-                throw new GameOverException(GameResult.WIN, bot2.getBotLocation());
+                throw new GameOverException(GameResult.WIN, null /*bot2.getBotLocation()*/);
         }
     }
 

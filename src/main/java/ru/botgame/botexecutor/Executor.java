@@ -1,6 +1,8 @@
 package ru.botgame.botexecutor;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 /**
  * Created by SBT-Selin-AN on 12.05.2016.
@@ -36,26 +38,26 @@ public class Executor {
 
             while (true) {
                 prevBoard = board;
-                bot1.getWriter().write(board + "\n");
-//                bot1.getWriter().flush();
-//                bot1.getProcess().waitFor();
+                bot1.getWriter().write(board);
+                bot1.getWriter().newLine();
+                bot1.getWriter().flush();
                 while (!bot1.getReader().ready()) {
                 }
                 board = bot1.getReader().readLine();
 
-//                bot1.getWriter().write(board + "\n");
-//                bot1.getProcess().waitFor();
-
+                System.out.println("bot1: " + board);
                 gameLog.writeTurnToLog("bot1: " + board.replace("19", ""));
                 refery.validateBoard(board, prevBoard, bot1, bot1, bot2);
 
                 prevBoard = board;
-                bot2.getWriter().write(board + "\n");
-//                bot2.getWriter().flush();
+                bot2.getWriter().write(board);
+                bot2.getWriter().newLine();
+                bot2.getWriter().flush();
                 while (!bot2.getReader().ready()) {
                 }
                 board = bot2.getReader().readLine();
 
+                System.out.println("bot2: " + board);
                 gameLog.writeTurnToLog("bot2: " + board.replace("19", ""));
                 refery.validateBoard(board, prevBoard, bot2, bot1, bot2);
             }
