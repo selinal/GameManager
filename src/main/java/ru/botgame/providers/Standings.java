@@ -106,7 +106,7 @@ public class Standings {
                             secondBot.addOneVictory();
                             firstBot.addOneDefeat();
                         }
-                        if (nameDefeat != null && nameWinner.equals(secondBot.getName())) {
+                        if (nameDefeat != null && nameDefeat.equals(secondBot.getName())) {
                             setResultBattleInStandings(firstBot.getName(), secondBot.getName(), 1);
                             firstBot.addOneVictory();
                             secondBot.addOneDefeat();

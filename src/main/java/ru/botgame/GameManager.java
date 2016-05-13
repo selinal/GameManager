@@ -26,7 +26,8 @@ public class GameManager {
         Properties projectProperties = new Properties();
         InputStream in = null;
         try {
-            in = getClass().getClassLoader().getResourceAsStream("config.properties");
+//            in = getClass().getClassLoader().getResourceAsStream("config.properties");
+            in = new FileInputStream("C:\\HOME\\workplace\\GameManager\\src\\main\\resources\\config.properties");
             projectProperties.load(in);
             botsDirectory = projectProperties.getProperty("sbt.root.bots.directory");
             resultDirectory = projectProperties.getProperty("sbt.root.results.directory");
