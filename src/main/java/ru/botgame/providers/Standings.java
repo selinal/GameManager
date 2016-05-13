@@ -4,6 +4,7 @@ import ru.botgame.entities.Bot;
 import ru.botgame.entities.Meeting;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,10 +21,16 @@ public class Standings {
 
     List<Meeting> meetingList;
     List<Bot> bots;
+    List<MyBot> myBots;
 
     public Standings(String resultsDirectory, List<Bot> bots, List<Meeting> meetingList) {
         this.meetingList = meetingList;
         this.bots = bots;
+
+        myBots = new ArrayList<>();
+        for (Bot bot:bots) {
+            myBots.add(new MyBot(bot.getName()));
+        }
 
         pathResult = "" + resultsDirectory + File.separator + "final_result";
         File fileDirectory = new File(pathResult);
@@ -51,8 +58,20 @@ public class Standings {
 
         for (int i = 0; i < meetingList.size(); i++) {
             Meeting meeting = meetingList.get(i);
-            Bot firstBot = meeting.getFirstBot();
-            Bot secondBot = meeting.getSecondBot();
+            MyBot firstBot = null;
+
+
+            for (MyBot bot:myBots) {
+                if(bot.getName().equals(meeting.getFirstBot().getName())) firstBot = bot;
+            }
+
+            //Bot secondBot = meeting.getSecondBot();
+            MyBot secondBot = null;
+
+            for (MyBot bot:myBots) {
+                if(bot.getName().equals(meeting.getSecondBot().getName())) secondBot = bot;
+            }
+
             File file = new File(meeting.getResultLocation());
             String[] listNameFile = file.list();
             File[] listFile = file.listFiles();
@@ -130,7 +149,7 @@ public class Standings {
         writerWinners.newLine();
         String[] winners = calculateWinners();
         for (int i = 0; i < winners.length; i++) {
-            for (Bot bot : bots) {
+            for (MyBot bot:myBots) {
                 if(winners[i].equals(bot.getName())){
                     writerWinners.write("" + bot.getName() + ";" + bot.getVictoryCount() + ";" + bot.getDefeatCount() + ";" + bot.getDrawCount());
                 }
@@ -195,4 +214,41 @@ public class Standings {
         return list;
     }
 
+    private class MyBot{
+
+        private String Name;
+
+        private int victoryCount;//количество побед
+        private int defeatCount;//количество поражений
+        private int drawCount;//Количество ничьей
+
+        public MyBot (String nameBot){
+            Name = nameBot;
+            victoryCount = 0;
+            defeatCount = 0;
+            drawCount = 0;
+        }
+
+        public void addOneVictory(){victoryCount++;}
+
+        public void addOneDefeat(){defeatCount++;}
+
+        public void addOneDraw(){drawCount++;}
+
+        public int getVictoryCount() {
+            return victoryCount;
+        }
+
+        public int getDefeatCount() {
+            return defeatCount;
+        }
+
+        public int getDrawCount() {
+            return drawCount;
+        }
+
+        public String getName() {
+            return Name;
+        }
+    }
 }
