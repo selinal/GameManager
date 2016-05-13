@@ -51,24 +51,38 @@ public class Standings {
 
         for (int i = 0; i < meetingList.size(); i++) {
             Meeting meeting = meetingList.get(i);
-            String bot1 = meeting.getFirstBot().getName();
-            String bot2 = meeting.getSecondBot().getName();
+            Bot firstBot = meeting.getFirstBot();
+            Bot secondBot = meeting.getSecondBot();
             File file = new File(meeting.getResultLocation());
             String[] listNameFile = file.list();
             File[] listFile = file.listFiles();
             for (int j = 0; j < listNameFile.length; j++) {
                 if (listNameFile[j].toString().split("\\.")[0].equals("result")) {
+
                     //читаем и  забираем победителя
                     BufferedReader bufferedReader = new BufferedReader(new FileReader(listFile[j]));
-                    String nameWinner = bufferedReader.readLine();
+                    String log = bufferedReader.readLine();
+                    String cause = log.split(";")[0];
+                    String nameWinner = null;
+                    if(cause.equals("WIN")){
+                        nameWinner = log.split(";")[1];
+                    }
                     bufferedReader.close();
-                    if (nameWinner != null && nameWinner.equals(bot1)) {
-                        setResultBattleInStandings(bot1, bot2, 1);
+                    if (nameWinner != null && nameWinner.equals(firstBot.getName())) {
+                        setResultBattleInStandings(firstBot.getName(), secondBot.getName(), 1);
+                        firstBot.addOneVictory();
+                        secondBot.addOneDefeat();
                     }
-                    if (nameWinner != null && nameWinner.equals(bot2)) {
-                        setResultBattleInStandings(bot2, bot1, 1);
+                    if (nameWinner != null && nameWinner.equals(secondBot.getName())) {
+                        setResultBattleInStandings(secondBot.getName(), firstBot.getName(), 1);
+                        secondBot.addOneVictory();
+                        firstBot.addOneDefeat();
                     }
-                    //Что делать с ничей и как она выглядит в файле??????
+                    //Что делать с ничьей и как она выглядит в файле??????
+                    if(nameWinner == null){
+                        secondBot.addOneDraw();
+                        firstBot.addOneDraw();
+                    }
                 }
             }
         }
@@ -112,14 +126,21 @@ public class Standings {
         File f = new File(pathWinners);
         f.createNewFile();
         BufferedWriter writerWinners = new BufferedWriter(new FileWriter(pathWinners));
+        writerWinners.write("-;Victory;Defeat;Draw");
         String[] winners = calculateWinners();
         for (int i = 0; i < winners.length; i++) {
-            writerWinners.write(winners[i]);
-            writerWinners.write(";");
+            for (Bot bot : bots) {
+                if(winners[i].equals(bot.getName())){
+                    writerWinners.write("" + bot.getName() + ";" + bot.getVictoryCount() + ";" + bot.getDefeatCount() + ";" + bot.getDrawCount());
+                }
+            }
+            writerWinners.newLine();
         }
         writerWinners.flush();
         writerWinners.close();
     }
+
+
 
     private String[] calculateWinners() {
         int[] s = new int[standings.length];
@@ -172,4 +193,5 @@ public class Standings {
         }
         return list;
     }
+
 }
