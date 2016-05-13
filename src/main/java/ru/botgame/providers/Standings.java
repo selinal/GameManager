@@ -4,6 +4,7 @@ import ru.botgame.entities.Bot;
 import ru.botgame.entities.Meeting;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,10 +21,16 @@ public class Standings {
 
     List<Meeting> meetingList;
     List<Bot> bots;
+    List<MyBot> myBots;
 
     public Standings(String resultsDirectory, List<Bot> bots, List<Meeting> meetingList) {
         this.meetingList = meetingList;
         this.bots = bots;
+
+        myBots = new ArrayList<>();
+        for (Bot bot:bots) {
+            myBots.add(new MyBot(bot.getName()));
+        }
 
         pathResult = "" + resultsDirectory + File.separator + "final_result";
         File fileDirectory = new File(pathResult);
@@ -51,24 +58,66 @@ public class Standings {
 
         for (int i = 0; i < meetingList.size(); i++) {
             Meeting meeting = meetingList.get(i);
-            String bot1 = meeting.getFirstBot().getName();
-            String bot2 = meeting.getSecondBot().getName();
+            MyBot firstBot = null;
+
+
+            for (MyBot bot:myBots) {
+                if(bot.getName().equals(meeting.getFirstBot().getName())) firstBot = bot;
+            }
+
+            //Bot secondBot = meeting.getSecondBot();
+            MyBot secondBot = null;
+
+            for (MyBot bot:myBots) {
+                if(bot.getName().equals(meeting.getSecondBot().getName())) secondBot = bot;
+            }
+
             File file = new File(meeting.getResultLocation());
             String[] listNameFile = file.list();
             File[] listFile = file.listFiles();
             for (int j = 0; j < listNameFile.length; j++) {
-                if (listNameFile[j].toString().split("\\.")[0].equals("result")) {
+                if (listNameFile[j].toString().split("\\.")[0].equals("results")) {
+
                     //читаем и  забираем победителя
                     BufferedReader bufferedReader = new BufferedReader(new FileReader(listFile[j]));
-                    String nameWinner = bufferedReader.readLine();
+                    String log = bufferedReader.readLine();
                     bufferedReader.close();
-                    if (nameWinner != null && nameWinner.equals(bot1)) {
-                        setResultBattleInStandings(bot1, bot2, 1);
+                    String cause = log.split(";")[0];
+                    String nameWinner = null;
+                    String nameDefeat = null;
+                    if(cause.equals("WIN")){
+                        nameWinner = log.split(";")[1];
+                        if (nameWinner != null && nameWinner.equals(firstBot.getName())) {
+                            setResultBattleInStandings(firstBot.getName(), secondBot.getName(), 1);
+                            firstBot.addOneVictory();
+                            secondBot.addOneDefeat();
+                        }
+                        if (nameWinner != null && nameWinner.equals(secondBot.getName())) {
+                            setResultBattleInStandings(secondBot.getName(), firstBot.getName(), 1);
+                            secondBot.addOneVictory();
+                            firstBot.addOneDefeat();
+                        }
                     }
-                    if (nameWinner != null && nameWinner.equals(bot2)) {
-                        setResultBattleInStandings(bot2, bot1, 1);
+
+                    if(cause.equals("LOOSE_BY_TIMEOUT")){
+                        nameDefeat = log.split(";")[1];
+                        if(nameDefeat != null && nameDefeat.equals(firstBot.getName())){
+                            setResultBattleInStandings(secondBot.getName(), firstBot.getName(), 1);
+                            secondBot.addOneVictory();
+                            firstBot.addOneDefeat();
+                        }
+                        if (nameDefeat != null && nameDefeat.equals(secondBot.getName())) {
+                            setResultBattleInStandings(firstBot.getName(), secondBot.getName(), 1);
+                            firstBot.addOneVictory();
+                            secondBot.addOneDefeat();
+                        }
                     }
-                    //Что делать с ничей и как она выглядит в файле??????
+
+                    //Что делать с ничьей и как она выглядит в файле??????
+                    if(cause.equals("DRAW")){
+                        secondBot.addOneDraw();
+                        firstBot.addOneDraw();
+                    }
                 }
             }
         }
@@ -77,6 +126,7 @@ public class Standings {
         saveWinners();
     }
 
+    //прибавляет результат первому боту в игре со вторым в сетке
     private void setResultBattleInStandings(String nameBot1, String nameBot2, int resultBattle) {
         if (!nameBot1.equals(nameBot2)) {
             for (int i = 0; i < standings.length; i++) {
@@ -112,14 +162,22 @@ public class Standings {
         File f = new File(pathWinners);
         f.createNewFile();
         BufferedWriter writerWinners = new BufferedWriter(new FileWriter(pathWinners));
+        writerWinners.write("Команды;Побед;Поражений;Ничьих");
+        writerWinners.newLine();
         String[] winners = calculateWinners();
         for (int i = 0; i < winners.length; i++) {
-            writerWinners.write(winners[i]);
-            writerWinners.write(";");
+            for (MyBot bot:myBots) {
+                if(winners[i].equals(bot.getName())){
+                    writerWinners.write("" + bot.getName() + ";" + bot.getVictoryCount() + ";" + bot.getDefeatCount() + ";" + bot.getDrawCount());
+                }
+            }
+            writerWinners.newLine();
         }
         writerWinners.flush();
         writerWinners.close();
     }
+
+
 
     private String[] calculateWinners() {
         int[] s = new int[standings.length];
@@ -171,5 +229,43 @@ public class Standings {
             list[i] = bots.get(i).getName();
         }
         return list;
+    }
+
+    private class MyBot{
+
+        private String Name;
+
+        private int victoryCount;//количество побед
+        private int defeatCount;//количество поражений
+        private int drawCount;//Количество ничьей
+
+        public MyBot (String nameBot){
+            Name = nameBot;
+            victoryCount = 0;
+            defeatCount = 0;
+            drawCount = 0;
+        }
+
+        public void addOneVictory(){victoryCount++;}
+
+        public void addOneDefeat(){defeatCount++;}
+
+        public void addOneDraw(){drawCount++;}
+
+        public int getVictoryCount() {
+            return victoryCount;
+        }
+
+        public int getDefeatCount() {
+            return defeatCount;
+        }
+
+        public int getDrawCount() {
+            return drawCount;
+        }
+
+        public String getName() {
+            return Name;
+        }
     }
 }

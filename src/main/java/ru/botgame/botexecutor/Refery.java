@@ -1,16 +1,13 @@
 package ru.botgame.botexecutor;
 
-/**
- * Created by SBT-Selin-AN on 12.05.2016.
- */
-public class Refery {
+class Refery {
     public static final int BOARD_SIZE = 19;
     public static final String XXXXX = "xxxxx";
     public static final String OOOOO = "ooooo";
 
     public void validateBoard(String board, String prevBoard, Bot currBot, Bot bot1, Bot bot2) throws GameOverException {
-        // ????? ?????? ????????
-        // 1. ???? ????????? ?? ?????????? ?????
+        // здесь всякие проверки
+        // 1. игра закончена по заполнению доски (ничья - побеждает тот бот, который был быстрее)
         boolean emptyFieldExists = false;
         for (char c : board.toCharArray()) {
             if (c == '-') {
@@ -18,9 +15,19 @@ public class Refery {
                 break;
             }
         }
-        if (!emptyFieldExists)
-            throw new GameOverException(GameResult.DRAW, null);
-        // 2. ?????????? ??? ????????? - ??????????? ????????
+        if (!emptyFieldExists) {
+            String winner;
+            if ( bot1.getTimer() > bot2.getTimer() ) {
+                winner = bot1.getName();
+            } else if ( bot2.getTimer() > bot1.getTimer() ) {
+                winner = bot2.getName();
+            } else {
+                // если ничья по ходам и ничья по времени реакции ботов, то это просто чудо какое-то =)
+                winner = "Both bots showed equal speed!";
+            }
+            throw new GameOverException(GameResult.DRAW, winner + " WINS by speed");
+        }
+        // 2. невалидный ход соперника - технический проигрыш
         int difs = 0;
         char[] boardChars = board.toCharArray();
         char[] prevBoardChars = prevBoard.toCharArray();
@@ -29,8 +36,8 @@ public class Refery {
                 difs++;
         }
         if (difs != 1)
-            throw new GameOverException(GameResult.WIN, /*currBot == bot1 ? bot2.getBotLocation() : bot1.getBotLocation()*/null);
-        // 3. ?????? ?? ????????
+            throw new GameOverException(GameResult.WIN, currBot == bot1 ? bot2.getName() : bot1.getName());
+        // 3. победа по условиям
         String[] horiz = new String[BOARD_SIZE];
         for (int i = 0; i < BOARD_SIZE; i++) {
             int startPos = 2 + i * BOARD_SIZE;
@@ -92,30 +99,30 @@ public class Refery {
         for (String line: horiz)
         {
             if (line.indexOf(XXXXX) >= 0)
-                throw new GameOverException(GameResult.WIN, null/*bot1.getBotLocation()*/);
+                throw new GameOverException(GameResult.WIN, bot1.getName());
             if (line.indexOf(OOOOO) >= 0)
-                throw new GameOverException(GameResult.WIN, null /*bot2.getBotLocation()*/);
+                throw new GameOverException(GameResult.WIN, bot2.getName());
         }
         for (String line: vert)
         {
             if (line.indexOf(XXXXX) >= 0)
-                throw new GameOverException(GameResult.WIN, null/*bot1.getBotLocation()*/);
+                throw new GameOverException(GameResult.WIN, bot1.getName());
             if (line.indexOf(OOOOO) >= 0)
-                throw new GameOverException(GameResult.WIN, null /*bot2.getBotLocation()*/);
+                throw new GameOverException(GameResult.WIN, bot2.getName());
         }
         for (String line: diag1)
         {
             if (line.indexOf(XXXXX) >= 0)
-                throw new GameOverException(GameResult.WIN, null/*bot1.getBotLocation()*/);
+                throw new GameOverException(GameResult.WIN, bot1.getName());
             if (line.indexOf(OOOOO) >= 0)
-                throw new GameOverException(GameResult.WIN, null /*bot2.getBotLocation()*/);
+                throw new GameOverException(GameResult.WIN, bot2.getName());
         }
         for (String line: diag2)
         {
             if (line.indexOf(XXXXX) >= 0)
-                throw new GameOverException(GameResult.WIN, null/*bot1.getBotLocation()*/);
+                throw new GameOverException(GameResult.WIN, bot1.getName());
             if (line.indexOf(OOOOO) >= 0)
-                throw new GameOverException(GameResult.WIN, null /*bot2.getBotLocation()*/);
+                throw new GameOverException(GameResult.WIN, bot2.getName());
         }
     }
 

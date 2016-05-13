@@ -7,10 +7,7 @@ import ru.botgame.providers.MeetingProvider;
 import ru.botgame.providers.Standings;
 import ru.botgame.providers.ThreadPoolManager;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 import java.util.Properties;
 
@@ -22,11 +19,12 @@ public class GameManager {
     private long awaitTime;
     private long timeout;
 
-    public GameManager() {
+    public GameManager(String pathToConfigFile) {
         Properties projectProperties = new Properties();
         InputStream in = null;
         try {
-            in = getClass().getClassLoader().getResourceAsStream("config.properties");
+//            in = getClass().getClassLoader().getResourceAsStream("config.properties");
+            in = new FileInputStream(pathToConfigFile);
             projectProperties.load(in);
             botsDirectory = projectProperties.getProperty("sbt.root.bots.directory");
             resultDirectory = projectProperties.getProperty("sbt.root.results.directory");
