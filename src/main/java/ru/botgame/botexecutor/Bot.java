@@ -24,14 +24,10 @@ class Bot {
         ProcessBuilder builder = new ProcessBuilder(
                 "cmd.exe",
                 "/c",
-                "cd " + botLocation + " && run.bat"
+                "cd " + botLocation + " && run.cmd"
         );
-//        ProcessBuilder builder = new ProcessBuilder("java", "-jar", "...", "params");
-//        process = Runtime.getRuntime().exec("cmd /c \"" + botLocation + File.separator + "run.bat\"");
         builder.redirectErrorStream(true);
         process = builder.start();
-
-
         if (process == null)
             throw new GameOverException(GameResult.WIN, null);
         if (!process.isAlive())
@@ -48,8 +44,6 @@ class Bot {
     public BufferedWriter getWriter() { return writer; }
 
     public String getBotLocation() { return botLocation; }
-
-
 
     public void kill() {
         process.destroyForcibly();

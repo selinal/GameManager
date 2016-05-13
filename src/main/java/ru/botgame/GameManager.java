@@ -20,10 +20,11 @@ public class GameManager {
     private String resultDirectory;
     private int capacity;
     private long awaitTime;
+    private long timeout;
 
     public GameManager() {
         Properties projectProperties = new Properties();
-        InputStream in = null;//"C:\\HOME\\workplace\\GameManager\\src\\main\\resources\\config.properties");
+        InputStream in = null;
         try {
             in = getClass().getClassLoader().getResourceAsStream("config.properties");
             projectProperties.load(in);
@@ -31,6 +32,7 @@ public class GameManager {
             resultDirectory = projectProperties.getProperty("sbt.root.results.directory");
             capacity = Integer.parseInt(projectProperties.getProperty("sbt.thread.pool.capacity"));
             awaitTime = Integer.parseInt(projectProperties.getProperty("sbt.thread.termination.time.minutes"));
+            timeout = Integer.parseInt(projectProperties.getProperty("sbt.bots.timeout"));
         } catch (IOException e) {
             e.printStackTrace();
         }finally {
@@ -50,7 +52,7 @@ public class GameManager {
         MeetingProvider meetingsProvider = new MeetingProvider(resultDirectory);
         List<Meeting> meetingList = meetingsProvider.getMeetingList(bots);
 
-        ThreadPoolManager threadPoolManager = new ThreadPoolManager(capacity, awaitTime);
+        ThreadPoolManager threadPoolManager = new ThreadPoolManager(capacity, awaitTime, timeout);
         threadPoolManager.startGames(meetingList);
 
         Standings standings = new Standings(resultDirectory, bots, meetingList);
