@@ -127,6 +127,7 @@ public class Standings {
         f.createNewFile();
         BufferedWriter writerWinners = new BufferedWriter(new FileWriter(pathWinners));
         writerWinners.write("-;Victory;Defeat;Draw");
+        writerWinners.newLine();
         String[] winners = calculateWinners();
         for (int i = 0; i < winners.length; i++) {
             for (Bot bot : bots) {
