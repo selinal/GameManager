@@ -1,5 +1,6 @@
 package ru.botgame.botexecutor;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -14,6 +15,7 @@ public class Executor {
     private Logger gameResultLog;
     private Refery refery;
     private long timeout;
+    private String board;
 
     public static void main(String[] args) {
         Executor ex = new Executor();
@@ -31,15 +33,14 @@ public class Executor {
         gameResultLog = new Logger(gameDir);
         refery = new Refery();
 
-        String board = null;
+        board = null;
         try {
             bot1.init();
             bot2.init();
             board = "19" + new String(new char[361]).replace("\0", "-");
-
             while (true) {
-                board = doStep(bot1, board);
-                board = doStep(bot2, board);
+                doStep(bot1);
+                doStep(bot2);
             }
         } catch (GameOverException e) {
             gameResultLog.writeGameResult(e.getResult(), e.getWinnerLocation());
@@ -51,18 +52,17 @@ public class Executor {
         }
     }
 
-    private String doStep(Bot bot, String board) throws IOException, GameOverException {
+    private void doStep(Bot bot) throws IOException, GameOverException {
         String prevBoard = board;
-        bot.getWriter().write(board);
-        bot.getWriter().newLine();
-        bot.getWriter().flush();
+        BufferedWriter writer = bot.getWriter();
+        writer.write(board);
+        writer.newLine();
+        writer.flush();
         wait(bot);
         board = bot.getReader().readLine();
-
         System.out.println("bot1: " + board);
         gameLog.writeTurnToLog("bot1: " + board.replace("19", ""));
         refery.validateBoard(board, prevBoard, bot, bot1, bot2);
-        return board;
     }
 
     private void wait(Bot bot) throws IOException, GameOverException {

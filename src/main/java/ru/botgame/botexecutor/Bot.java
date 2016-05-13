@@ -24,7 +24,7 @@ class Bot {
         ProcessBuilder builder = new ProcessBuilder(
                 "cmd.exe",
                 "/c",
-                "cd " + botLocation + " && run.bat"
+                "cd " + botLocation + " && run.cmd"
         );
         builder.redirectErrorStream(true);
         process = builder.start();
