@@ -29,14 +29,26 @@ class Refery {
         }
         // 2. невалидный ход соперника - технический проигрыш
         int difs = 0;
+        int oldEmpties = 0;
+        int empties = 0;
         char[] boardChars = board.toCharArray();
         char[] prevBoardChars = prevBoard.toCharArray();
-        for (int i = 0; i < boardChars.length; i++) {
-            if (boardChars[i] != prevBoardChars[i])
-                difs++;
+        for (int i = 0; i < prevBoard.length(); i++) {
+            if(prevBoardChars[i] == '-') {
+                oldEmpties++;
+            }
         }
-        if (difs != 1)
+        for (int i = 0; i < boardChars.length; i++) {
+            if (boardChars[i] != prevBoardChars[i]) {
+                difs++;
+            }
+            if(boardChars[i] == '-') {
+                empties++;
+            }
+        }
+        if (difs != 1 || (oldEmpties - 1) != empties) {
             throw new GameOverException(GameResult.WIN, currBot == bot1 ? bot2.getName() : bot1.getName());
+        }
         // 3. победа по условиям
         String[] horiz = new String[BOARD_SIZE];
         for (int i = 0; i < BOARD_SIZE; i++) {
