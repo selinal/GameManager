@@ -8,14 +8,18 @@ import java.util.concurrent.Executors;
  * Created by SBT-Khalimov-RR on 20.04.2016.
  */
 class Bot {
+
+    private String name;
     private Process process;
 
     private BufferedReader reader;
     private BufferedWriter writer;
     private final String botLocation;
+    private long timer;
 
     Bot(String botLocation) {
         this.botLocation = botLocation;
+        name = botLocation.substring(botLocation.lastIndexOf(File.separator)+1);
     }
 
     public void init() throws IOException, GameOverException {
@@ -24,7 +28,7 @@ class Bot {
         ProcessBuilder builder = new ProcessBuilder(
                 "cmd.exe",
                 "/c",
-                "cd " + botLocation + " && run.cmd"
+                "cd " + botLocation + " && run.bat"
         );
         builder.redirectErrorStream(true);
         process = builder.start();
@@ -41,13 +45,31 @@ class Bot {
         return reader;
     }
 
-    public BufferedWriter getWriter() { return writer; }
+    public BufferedWriter getWriter() {
+        return writer;
+    }
 
-    public String getBotLocation() { return botLocation; }
+    public String getBotLocation() {
+        return botLocation;
+    }
 
     public void kill() {
         process.destroyForcibly();
     }
 
-    public Process getProcess() { return process; }
+    public Process getProcess() {
+        return process;
+    }
+
+    public long getTimer() {
+        return timer;
+    }
+
+    public void increaseTimer(long timer) {
+        this.timer += timer;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

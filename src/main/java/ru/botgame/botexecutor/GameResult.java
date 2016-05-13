@@ -9,5 +9,6 @@ package ru.botgame.botexecutor;
  */
 public enum GameResult {
     DRAW,
-    WIN
+    WIN,
+    LOOSE_BY_TIMEOUT
 }

@@ -9,15 +9,15 @@ package ru.botgame.botexecutor;
  */
 public class GameOverException extends Exception {
     private GameResult result;
-    private String winnerLocation;
+    private String winnerName;
 
-    public GameOverException(GameResult result, String botLocation) {
+    public GameOverException(GameResult result, String name) {
         this.result = result;
-        this.winnerLocation = botLocation;
+        this.winnerName = name;
     }
 
-    public String getWinnerLocation() {
-        return winnerLocation;
+    public String getWinnerName() {
+        return winnerName;
     }
 
     public GameResult getResult() {
@@ -28,7 +28,7 @@ public class GameOverException extends Exception {
         this.result = result;
     }
 
-    public void setWinnerLocation(String winnerLocation) {
-        this.winnerLocation = winnerLocation;
+    public void setWinnerName(String winnerName) {
+        this.winnerName = winnerName;
     }
 }

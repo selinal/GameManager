@@ -11,15 +11,15 @@ import java.util.Date;
 public class Executor {
     private Bot bot1;
     private Bot bot2;
-    private Logger gameLog;
-    private Logger gameResultLog;
+    private BotLogger gameLog;
+    private BotLogger gameResultLog;
     private Refery refery;
     private long timeout;
     private String board;
 
     public static void main(String[] args) {
         Executor ex = new Executor();
-//        ex.run("bots\\d32bot1.exe", "bots\\d32bot2.exe", "bots");
+        ex.run("bots\\d32bot1.exe", "bots\\d32bot2.exe", "bots", 11L);
         //ex.run("bots\\bot1.bat", "bots\\bot2.bat", "bots");
         //ex.run("bots\\BotCpp1.exe", "bots\\BotCpp1.exe", "bots");
         //ex.run("bots\\CSBot1.exe", "bots\\CSBot1.exe", "bots");
@@ -29,11 +29,11 @@ public class Executor {
         this.timeout = timeout;
         bot1 = new Bot(bot1Location);
         bot2 = new Bot(bot2Location);
-        gameLog = new Logger(gameDir);
-        gameResultLog = new Logger(gameDir);
+        gameLog = new BotLogger(gameDir);
+        gameResultLog = new BotLogger(gameDir);
         refery = new Refery();
 
-        board = null;
+//        String board = null;
         try {
             bot1.init();
             bot2.init();
@@ -43,7 +43,7 @@ public class Executor {
                 doStep(bot2);
             }
         } catch (GameOverException e) {
-            gameResultLog.writeGameResult(e.getResult(), e.getWinnerLocation());
+            gameResultLog.writeGameResult(e.getResult(), e.getWinnerName());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -60,8 +60,8 @@ public class Executor {
         writer.flush();
         wait(bot);
         board = bot.getReader().readLine();
-        System.out.println("bot1: " + board);
-        gameLog.writeTurnToLog("bot1: " + board.replace("19", ""));
+        System.out.println(bot.getName() + ":" + board);
+        gameLog.writeTurnToLog(bot.getName() + ":" + board.replace("19", ""));
         refery.validateBoard(board, prevBoard, bot, bot1, bot2);
     }
 
@@ -70,7 +70,7 @@ public class Executor {
         while (!bot.getReader().ready()) {
             long current = System.currentTimeMillis();
             if(current - start > timeout){
-                throw new GameOverException(GameResult.WIN, bot.getBotLocation());
+                throw new GameOverException(GameResult.LOOSE_BY_TIMEOUT, bot.getName());
             }
         }
     }
