@@ -76,29 +76,45 @@ public class Standings {
             String[] listNameFile = file.list();
             File[] listFile = file.listFiles();
             for (int j = 0; j < listNameFile.length; j++) {
-                if (listNameFile[j].toString().split("\\.")[0].equals("result")) {
+                if (listNameFile[j].toString().split("\\.")[0].equals("results")) {
 
                     //читаем и  забираем победителя
                     BufferedReader bufferedReader = new BufferedReader(new FileReader(listFile[j]));
                     String log = bufferedReader.readLine();
+                    bufferedReader.close();
                     String cause = log.split(";")[0];
                     String nameWinner = null;
+                    String nameDefeat = null;
                     if(cause.equals("WIN")){
                         nameWinner = log.split(";")[1];
+                        if (nameWinner != null && nameWinner.equals(firstBot.getName())) {
+                            setResultBattleInStandings(firstBot.getName(), secondBot.getName(), 1);
+                            firstBot.addOneVictory();
+                            secondBot.addOneDefeat();
+                        }
+                        if (nameWinner != null && nameWinner.equals(secondBot.getName())) {
+                            setResultBattleInStandings(secondBot.getName(), firstBot.getName(), 1);
+                            secondBot.addOneVictory();
+                            firstBot.addOneDefeat();
+                        }
                     }
-                    bufferedReader.close();
-                    if (nameWinner != null && nameWinner.equals(firstBot.getName())) {
-                        setResultBattleInStandings(firstBot.getName(), secondBot.getName(), 1);
-                        firstBot.addOneVictory();
-                        secondBot.addOneDefeat();
+
+                    if(cause.equals("LOOSE_BY_TIMEOUT")){
+                        nameDefeat = log.split(";")[1];
+                        if(nameDefeat != null && nameDefeat.equals(firstBot.getName())){
+                            setResultBattleInStandings(secondBot.getName(), firstBot.getName(), 1);
+                            secondBot.addOneVictory();
+                            firstBot.addOneDefeat();
+                        }
+                        if (nameDefeat != null && nameWinner.equals(secondBot.getName())) {
+                            setResultBattleInStandings(firstBot.getName(), secondBot.getName(), 1);
+                            firstBot.addOneVictory();
+                            secondBot.addOneDefeat();
+                        }
                     }
-                    if (nameWinner != null && nameWinner.equals(secondBot.getName())) {
-                        setResultBattleInStandings(secondBot.getName(), firstBot.getName(), 1);
-                        secondBot.addOneVictory();
-                        firstBot.addOneDefeat();
-                    }
+
                     //Что делать с ничьей и как она выглядит в файле??????
-                    if(nameWinner == null){
+                    if(cause.equals("DRAW")){
                         secondBot.addOneDraw();
                         firstBot.addOneDraw();
                     }
@@ -110,6 +126,7 @@ public class Standings {
         saveWinners();
     }
 
+    //прибавляет результат первому боту в игре со вторым в сетке
     private void setResultBattleInStandings(String nameBot1, String nameBot2, int resultBattle) {
         if (!nameBot1.equals(nameBot2)) {
             for (int i = 0; i < standings.length; i++) {
